@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class App {
@@ -18,7 +19,11 @@ public class App {
     public static void main(String[] args) throws Exception {
         Scanner scan = new Scanner(System.in);
 
-        Carro carro = null;
+        //Carro[] carros = new Carro[2];
+        ArrayList<Carro> carros = new ArrayList();
+        Carro novoCarro = null;
+
+        int pos = 0;
 
         String placa;
         int ano;
@@ -26,7 +31,7 @@ public class App {
         String modelo;
         double kilometragem,distancia;
 
-        int op;
+        int op,novo;
 
         do{
             System.out.println(menu());
@@ -42,45 +47,80 @@ public class App {
                     cor = scan.nextLine();
                     System.out.println("Digite o ano:");
                     ano = scan.nextInt();
-                    System.out.println("Digite a kilometragem:");
-                    kilometragem = scan.nextDouble();
+                    System.out.println("Esse carro é novo? (1-sim, 0-não)");
+                    novo = scan.nextInt();
+                    if(novo == 0){
+                        System.out.println("Digite a kilometragem:");
+                        kilometragem = scan.nextDouble();
 
-                    carro = new Carro();
+                        novoCarro = new Carro(placa,ano,cor,
+                                         modelo,kilometragem);
+                        carros.add(novoCarro);
+                    }else{
+                        novoCarro = new Carro(placa,ano,cor,modelo);
                     
-                    carro.placa = placa;
-                    carro.ano = ano;
-                    carro.modelo = modelo;
-                    carro.kilometragem = kilometragem;
-                    carro.cor = cor;
+                        carros.add(novoCarro);
+                    }
+                    
+                    //carro.placa = placa;
+                    //carro.ano = ano;
+                    //carro.modelo = modelo;
+                    //carro.kilometragem = kilometragem;
+                    //carro.setCor(cor);
 
                     System.out.println("Carro criado com sucesso!");
                 break;
                 case 2:
-                    System.out.println("Digite uma distância:");
-                    distancia = scan.nextDouble();
-                    boolean ret = carro.andar(distancia);
-                    if(ret){
-                        System.out.println("O carro andou");
-                    }else{
-                        System.out.println("Distância inválida!!");
+                    
+                    System.out.println("Digite uma placa:");
+                    placa = scan.nextLine();
+
+                    Carro busca = null;
+                    for(int i=0;i<carros.size();i++){
+                        Carro temp = carros.get(i);
+                        //if(temp.getPlaca().equals(placa))
+                        if(carros.get(i).getPlaca().equals(placa)){
+                            busca = carros.get(i);
+                        }
                     }
+
+                    if(busca != null){
+                        System.out.println("Digite uma distância:");
+                        distancia = scan.nextDouble();
+                        boolean ret = busca.andar(distancia);
+                        if(ret){
+                            System.out.println("O carro andou");
+                        }else{
+                            System.out.println("Distância inválida!!");
+                        }
+                    }else{
+                        System.out.println("Carro não encontrado!");
+                    }
+
+                    
                 break;
                 case 3:
-                    System.out.println("Verificando revisão");
+                    /*System.out.println("Verificando revisão");
                     boolean precisaRevisao = carro.verificaRevisao();
                     if(precisaRevisao){
                         System.out.println("Precisa revisar!!");
                     }else{
                         System.out.println("Não precisa revisar!!");
-                    }
+                    }*/
                 break;
                 case 4:
-                    System.out.println("Detalhes do carro");
-                    System.out.println("Placa:"+carro.placa);
-                    System.out.println("Ano:"+carro.ano);
-                    System.out.println("Modelo:"+carro.modelo);
-                    System.out.println("Cor:"+carro.cor);
-                    System.out.println("Kilometragem:"+carro.kilometragem);
+                    
+                    for(int i=0;i<carros.size();i++){
+                        Carro carro = carros.get(i);
+                        if(carro != null){
+                            System.out.println("Detalhes do carro");
+                            System.out.println("Placa:"+carro.getPlaca());
+                            System.out.println("Ano:"+carro.getAno());
+                            System.out.println("Modelo:"+carro.getModelo());
+                            System.out.println("Cor:"+carro.getCor());
+                            System.out.println("Kilometragem:"+carro.getKilometragem());    
+                        }
+                    }
                 break;
             }
         }while(op!=0);
